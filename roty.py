@@ -52,8 +52,9 @@ def roty():
     ascending=False # will sort highest to lowest 
 )
     top_3 = roty_table.head(3)
+
     st.subheader("Top 3 ROTY Candidates")
     st.dataframe(top_3)
     st.subheader("Full ROTY Rankings")
     st.dataframe(roty_table)
-roty()
+

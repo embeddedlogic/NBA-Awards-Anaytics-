@@ -8,8 +8,8 @@ It usese data from NBA analytics that predicts the major NBA Awards using player
 - Defensive Player of the Year
 - Sixth Man of the Year
 - Most Improved Player
-- Coach of the Year
 - Interactive charts and visualizations
+- I would do coach of the year but nba_api only has player/team stats
 
 ## Technologies Used
 
