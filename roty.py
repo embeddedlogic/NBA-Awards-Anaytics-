@@ -34,7 +34,7 @@ def roty():
             "PLUS_MINUS",
         ]]
     roty_table = roty_table[roty_table["GP"] >= 65] # have to play over 65 games
-    roty_table = roty_table[roty_table["MIN"] >= 20]
+    roty_table = roty_table[roty_table["MIN"] >= 20] #have 20 mins played
     roty_table["ROTY_SCORE"] = (
         
         roty_table["PTS"] * 0.32 + 
@@ -51,6 +51,9 @@ def roty():
     by="ROTY_SCORE",
     ascending=False # will sort highest to lowest 
 )
-
+    top_3 = roty_table.head(3)
+    st.subheader("Top 3 ROTY Candidates")
+    st.dataframe(top_3)
+    st.subheader("Full ROTY Rankings")
     st.dataframe(roty_table)
 roty()
