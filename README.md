@@ -1,15 +1,12 @@
-#NBA Award Predictor 
+#NBA Ranking Model
 It usese data from NBA analytics that predicts the major NBA Awards using player stats and ranking algorithms.
 
-## Supported Awards
+##  Awards
 
 - MVP
 - Rookie of the Year
-- Defensive Player of the Year
-- Sixth Man of the Year
 - Most Improved Player
-- Interactive charts and visualizations
-- I would do coach of the year but nba_api only has player/team stats
+
 
 ## Technologies Used
 

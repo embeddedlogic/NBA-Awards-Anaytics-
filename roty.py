@@ -33,7 +33,8 @@ def roty():
             "TOV",
             "PLUS_MINUS",
         ]]
-    roty_table = roty_table[roty_table["GP"] >= 65] # have to play over 65 games
+        
+    roty_table = roty_table[roty_table["GP"] >= 64] # have to play over 65 games
     roty_table = roty_table[roty_table["MIN"] >= 20] #have 20 mins played
     roty_table["ROTY_SCORE"] = (
         

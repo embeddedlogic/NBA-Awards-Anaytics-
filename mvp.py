@@ -1,7 +1,7 @@
 import streamlit as st
 from nba_api.stats.endpoints import  leaguedashplayerstats
 from nba_api.stats.endpoints import  leaguedashplayerclutch
-from nba_api.stats.endpoints import playerdashboardbyonoff
+from nba_api.stats.endpoints import leaguestandings
 
 
 def mvp():
@@ -18,18 +18,11 @@ def mvp():
      per_mode_detailed="PerGame", # game averages 
      measure_type_detailed_defense="Base", # normal stats box score stats 
      clutch_time="Last 5 Minutes", # clutch gene we see who really is clutch
-     point_diff=5, # score difference must be 5 pts or less 
+     point_diff= 5, # score difference must be 5 pts or less 
      ahead_behind="Ahead or Behind" # cluch stats from if team is winning or losing 
     )
-     player_on_off = playerdashboardbyonoff(
-     season="2025-26", 
-     season_type_playoffs="Regular Season",
-     per_mode_detailed="PerGame",
-     measure_type_detailed="Advanced", # advanced analtyics stats
-     pace_adjust="N", # dont adjust stats based on team pace 
-     plus_minus="N", # dont include plus/minus calculations 
-     rank="N", # dont add ranking colums 
-     )
+
+     
      mvp = stats.get_data_frames()[0]
      mvp_table = mvp[[
             "PLAYER_NAME",
@@ -52,5 +45,53 @@ def mvp():
             "DREB",
             "TOV",
             "PLUS_MINUS",
+            
 
     ]] 
+     clutch = clutch_stats.get_data_frames()[0]
+     clutch_table = clutch[[
+        "PLAYER_NAME",
+        "TEAM_ABBREVIATION",
+         "PTS",
+         "REB",
+         "AST",
+        "TOV",
+        "STL",
+        "BLK",
+    ]]
+     clutch_table["CLUTCH_SCORE"] = (
+        clutch_table["PTS"] * 2.0 +
+        clutch_table['AST'] * 1.3 +
+        (clutch_table['STL'] + clutch_table["BLK"]) * 2 +
+        clutch_table['REB'] * 1.3 -
+        clutch_table['TOV'] * 4
+    )
+     mvp_table = mvp_table.merge(
+        clutch_table[["PLAYER_NAME","CLUTCH_SCORE"]],
+        on = "PLAYER_NAME",
+        how= "left"
+     )
+     mvp_table["CLUTCH_SCORE"] = mvp_table["CLUTCH_SCORE"].fillna(0)
+     
+     mvp_table = mvp_table[mvp_table["GP"] >= 64] # have to play over 65 games
+     mvp_table["MVP_SCORE"] = (
+        mvp_table["PTS"] * 1.4 +
+        mvp_table["REB"] * 1.2 +
+        mvp_table["AST"] * 1.2 +
+        mvp_table["CLUTCH_SCORE"] * 1.5 +
+        (mvp_table["STL"] + mvp_table["BLK"]) * 2 -
+        mvp_table["TOV"] * 4
+)
+     
+     mvp_table = mvp_table.sort_values(
+        by="MVP_SCORE",
+        ascending=False
+     )
+     top_3 = mvp_table.head(3)
+     st.subheader("Top 3 MVP Candidates")
+     st.dataframe(top_3)
+     st.dataframe(mvp_table) 
+
+        
+
+     
